@@ -56,3 +56,5 @@ User.init(
 );
 
 module.exports = User;
+
+// this is all used from the mini project
