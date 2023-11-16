@@ -58,4 +58,14 @@ router.post('/logout', (req, res) => {
   }
 });
 
+router.post('/expire', (req, res) => {
+    if (req.session.logged_in) {
+      req.session.destroy(() => {
+        res.status(200).json({ message: 'Session expired. Please log in again.' });
+      });
+    } else {
+      res.status(200).json({ message: 'Session has already expired.' });
+    }
+  });
+
 module.exports = router;
