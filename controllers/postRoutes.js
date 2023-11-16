@@ -99,20 +99,6 @@ router.delete('/:id', async (req, res) => {
     }
   });
 
-  // Create a new comment
-router.post('/:id/comment', async (req, res) => {
-    try {
-      const commentData = await Comment.create({
-        content: req.body.content,
-        user_id: req.body.user_id,
-        post_id: req.params.id,
-      });
-      res.status(200).json(commentData);
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  });
-
   module.exports = router;
 
 //   you need to check what the deal is with username and user id
