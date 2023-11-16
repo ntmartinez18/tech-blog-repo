@@ -1,5 +1,47 @@
 const router = require('express').Router();
-const { Post } = require('./models');
+const { Post, User, Comment } = require('./models');
+
+// Render homepage with existing blog posts
+router.get('/', async (req, res) => {
+    try {
+      const postData = await Post.findAll({
+        include: [
+          {
+            model: User,
+            attributes: ['username'],
+          },
+          {
+            model: Comment,
+            include: [User],
+          },
+        ],
+      });
+      res.render('homepage', { posts: postData });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+
+  // Render individual blog post with comments
+router.get('/post/:id', async (req, res) => {
+    try {
+      const postData = await Post.findByPk(req.params.id, {
+        include: [
+          {
+            model: User,
+            attributes: ['username'],
+          },
+          {
+            model: Comment,
+            include: [User],
+          },
+        ],
+      });
+      res.render('post', { post: postData });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
 
 // create a new post
   router.post('/', async (req, res) => {
@@ -15,7 +57,7 @@ const { Post } = require('./models');
     }
   });
 
-// update a post
+// update a post by id
 router.put('/:id', async (req, res) => {
     try {
       const postData = await Post.update(
@@ -56,3 +98,19 @@ router.delete('/:id', async (req, res) => {
       res.status(500).json(err);
     }
   });
+
+  // Create a new comment
+router.post('/:id/comment', async (req, res) => {
+    try {
+      const commentData = await Comment.create({
+        content: req.body.content,
+        user_id: req.body.user_id,
+        post_id: req.params.id,
+      });
+      res.status(200).json(commentData);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+
+  module.exports = router;
