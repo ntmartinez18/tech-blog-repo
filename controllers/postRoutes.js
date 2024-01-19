@@ -100,5 +100,3 @@ router.delete('/:id', withAuth, async (req, res) => {
   });
 
   module.exports = router;
-
-//   you need to check what the deal is with username and user id
