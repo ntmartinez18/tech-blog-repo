@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const { Post, User, Comment } = require('../models');
+const withAuth = require('../utils/auth');
+
 
 // get all comments
 router.get('/', async (req, res) => {
